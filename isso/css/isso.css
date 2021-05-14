@@ -15,6 +15,112 @@
     color: #555;
     font-weight: bold;
 }
+
+#isso-thread > #isso-nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+#isso-thread > #isso-nav li {
+    float: left;
+    margin: 10px 10px;
+    font-family: sans-serif;
+}
+
+#isso-thread > #isso-nav li.active {
+    border-bottom: 3px solid #2e9fff;
+}
+
+#isso-thread > #isso-nav li.right-tab {
+    float: right;
+}
+
+/* #isso-thread > #isso-nav .caret {
+    padding: 0;
+    margin: 0;
+} */
+
+/* .caret {
+    width: 0;
+    height: 0;
+    vertical-align: center;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 4px solid #000;
+    opacity: .3;
+    content: "\2193";
+} */
+
+#isso-thread > #isso-nav a {
+    display: block;
+    text-align: center;
+    padding: 8px;
+    text-decoration: none;
+    color: #555;
+    font-weight: bold;
+}
+
+#isso-thread > #isso-nav a:hover {
+    color: #000;
+}
+
+#isso-thread > #isso-nav #login:after {
+    padding-left: 2px;
+    opacity: .3;
+    content: "\25BE";
+}
+/**************************************/
+
+.dropdown {
+    float: left;
+    overflow: hidden;
+}
+
+.dropdown .dropbtn {
+cursor: pointer;
+font-size: 16px;  
+border: none;
+outline: none;
+color: white;
+padding: 14px 16px;
+background-color: inherit;
+font-family: inherit;
+margin: 0;
+}
+
+.navbar a:hover, .dropdown:hover .dropbtn, .dropbtn:focus {
+background-color: red;
+}
+
+.dropdown-content {
+display: none;
+position: absolute;
+background-color: #f9f9f9;
+min-width: 160px;
+box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+z-index: 1;
+}
+
+.dropdown-content a {
+float: none;
+color: black;
+padding: 12px 16px;
+text-decoration: none;
+display: block;
+text-align: left;
+}
+
+.dropdown-content a:hover {
+background-color: #ddd;
+}
+
+.show {
+display: block;
+}
+/**************************************/
+
 #isso-thread > .isso-feedlink {
     float: right;
     padding-left: 1em;

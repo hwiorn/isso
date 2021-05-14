@@ -14,10 +14,12 @@ require(["app/lib/ready", "app/config", "app/i18n", "app/api", "app/isso", "app/
 
     var isso_thread;
     var heading;
+    var nav;
 
     function init() {
         isso_thread = $('#isso-thread');
-        heading = $.new("h4");
+        //heading = $.new("h4");
+        nav = $.htmlify(jade.render("comment-nav"));
 
         if (config["css"] && $("style#isso-style") === null) {
             var style = $.new("link");
@@ -41,7 +43,8 @@ require(["app/lib/ready", "app/config", "app/i18n", "app/api", "app/isso", "app/
             feedLinkWrapper.appendChild(feedLink);
             isso_thread.append(feedLinkWrapper);
         }
-        isso_thread.append(heading);
+        //isso_thread.append(heading);
+        isso_thread.append(nav);
         isso_thread.append(new isso.Postbox(null));
         isso_thread.append('<div id="isso-root"></div>');
     }
@@ -50,6 +53,10 @@ require(["app/lib/ready", "app/config", "app/i18n", "app/api", "app/isso", "app/
 
         if ($('#isso-root').length == 0) {
             return;
+        }
+
+        if (heading == null) {
+            heading = $("#isso-nav #comment-count", nav);
         }
 
         $('#isso-root').textContent = '';
@@ -88,9 +95,36 @@ require(["app/lib/ready", "app/config", "app/i18n", "app/api", "app/isso", "app/
         );
     }
 
+    function setLoginProvider() {
+        if ($('#isso-root').length == 0) {
+            return;
+        }
+
+        var login_list = $("#dropdown-list.dropdown-content", nav);
+        var login_btn = $("#login.dropdown-toggle", nav);
+        login_btn.on("click", function() {
+            login_list.classList.toggle("show");
+        });
+
+        for(var i = 0; i < 5; i++) {
+            var item = $.new("a");
+            item.textContent = "Text " + i; //TODO: add 
+            login_list.append(item);
+        }
+
+        window.addEventListener("click", function(e) {
+            if (!e.target.matches(".dropdown-toggle")) {
+                if (login_list.classList.contains('show')) {
+                    login_list.classList.remove('show');
+                }
+            }
+        });
+    }
+
     domready(function() {
         init();
         fetchComments();
+        setLoginProvider();
     });
 
     window.Isso = {

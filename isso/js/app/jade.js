@@ -1,4 +1,4 @@
-define(["libjs-jade-runtime", "app/utils", "jade!app/text/postbox", "jade!app/text/comment", "jade!app/text/comment-loader"], function(runtime, utils, tt_postbox, tt_comment, tt_comment_loader) {
+define(["libjs-jade-runtime", "app/utils", "jade!app/text/postbox", "jade!app/text/comment", "jade!app/text/comment-loader", "jade!app/text/comment-nav"], function(runtime, utils, tt_postbox, tt_comment, tt_comment_loader, tt_comment_nav) {
     "use strict";
 
     var globals = {},
@@ -22,6 +22,7 @@ define(["libjs-jade-runtime", "app/utils", "jade!app/text/postbox", "jade!app/te
     load("postbox", tt_postbox);
     load("comment", tt_comment);
     load("comment-loader", tt_comment_loader);
+    load("comment-nav", tt_comment_nav);
 
     set("bool", function(arg) { return arg ? true : false; });
     set("humanize", function(date) {

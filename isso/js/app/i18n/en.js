@@ -32,5 +32,6 @@ define({
     "date-month": "last month\n{{ n }} months ago",
     "date-year": "last year\n{{ n }} years ago",
 
-    "login": "Login"
+    "login": "Login",
+    "login-needed": "Login needed"
 });

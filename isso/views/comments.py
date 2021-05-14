@@ -115,6 +115,7 @@ class API(object):
         ('dislike', ('POST', '/id/<int:id>/dislike')),
         ('demo', ('GET', '/demo')),
         ('preview', ('POST', '/preview')),
+        ('auth_settings', ('GET', '/auth')),
         ('login', ('POST', '/login')),
         ('admin', ('GET', '/admin'))
     ]
@@ -1111,6 +1112,25 @@ class API(object):
         return redirect(
             get_current_url(env, strip_querystring=True) + '/index.html'
         )
+
+    def auth_settings(self, env, req):
+        conf = self.isso.conf.section("auth")
+        enabled = conf.get('enabled') or False
+        anon_disabled = conf.get('anonymous_disabled') or False
+        rv = {
+            'enabled': enabled,
+            'anonymous_disabled': anon_disabled,
+            'providers': {}
+        }
+        
+        # TODO: Parse data
+        if enabled:
+            rv['providers'] = {
+                'Open ID': [],
+                'Github': []      
+            }
+            
+        return JSON(rv, 200)
 
     def login(self, env, req):
         if not self.isso.conf.getboolean("admin", "enabled"):

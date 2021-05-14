@@ -209,6 +209,13 @@ define(["app/lib/promise", "app/globals"], function(Q, globals) {
         return deferred.promise;
     };
 
+    var auth_settings = function() {
+        var deferred = Q.defer();
+        curl("GET", endpoint + "/auth", null,
+            function(rv) { deferred.resolve(JSON.parse(rv.body)); });
+        return deferred.promise;
+    };
+
     return {
         endpoint: endpoint,
         salt: salt,
@@ -222,6 +229,7 @@ define(["app/lib/promise", "app/globals"], function(Q, globals) {
         like: like,
         dislike: dislike,
         feed: feed,
-        preview: preview
+        preview: preview,
+        auth_settings: auth_settings,
     };
 });

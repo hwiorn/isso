@@ -15,11 +15,13 @@ require(["app/lib/ready", "app/config", "app/i18n", "app/api", "app/isso", "app/
     var isso_thread;
     var heading;
     var nav;
+    var login_needed;
 
     function init() {
         isso_thread = $('#isso-thread');
-        //heading = $.new("h4");
         nav = $.htmlify(jade.render("comment-nav"));
+        login_needed = $.new("h4", i18n.translate('login-needed'));
+        login_needed.style.display = "none";
 
         if (config["css"] && $("style#isso-style") === null) {
             var style = $.new("link");
@@ -43,9 +45,10 @@ require(["app/lib/ready", "app/config", "app/i18n", "app/api", "app/isso", "app/
             feedLinkWrapper.appendChild(feedLink);
             isso_thread.append(feedLinkWrapper);
         }
-        //isso_thread.append(heading);
+
         isso_thread.append(nav);
         isso_thread.append(new isso.Postbox(null));
+        isso_thread.append(login_needed);
         isso_thread.append('<div id="isso-root"></div>');
     }
 
@@ -95,41 +98,75 @@ require(["app/lib/ready", "app/config", "app/i18n", "app/api", "app/isso", "app/
         );
     }
 
-    function setLoginProvider() {
+    function setLoginProviders() {
         if ($('#isso-root').length == 0) {
             return;
         }
 
-        var login_list = $("#dropdown-list.dropdown-content", nav);
-        var login_btn = $("#login.dropdown-toggle", nav);
-        login_btn.on("click", function() {
-            login_list.classList.toggle("show");
-        });
-
-        for(var i = 0; i < 5; i++) {
-            var item = $.new("a");
-            item.textContent = "Text " + i; //TODO: add 
-            login_list.append(item);
-        }
-
-        window.addEventListener("click", function(e) {
-            if (!e.target.matches(".dropdown-toggle")) {
-                if (login_list.classList.contains('show')) {
-                    login_list.classList.remove('show');
+        api.auth_settings().then(
+            function(rv) {
+                console.log(rv);
+                if(!rv.enabled) {
+                    return;
                 }
+
+                // Hide auth section in Postbox
+                if(rv.anonymous_disabled) {
+                    $(".auth-section p.input-wrapper", isso_thread).forEach(function(e) {
+                        e.hide();
+                    });
+
+                    // TODO: Check authentication and set enabled again
+                    $(".isso-postbox .textarea").hide();
+                    $(".auth-section", isso_thread).hide();
+                    login_needed.style.display = "block";
+                }
+
+                // TODO: If authentication is right
+                if(false) {
+                    $(".isso-postbox .textarea").show();
+                    $(".auth-section", isso_thread).show();
+                    login_needed.style.display = "none";
+                }
+
+                $(".dropdown", nav).show();
+                var login_list = $("#dropdown-list.dropdown-content", nav);
+                var login_btn = $("#login.dropdown-toggle", nav);
+                login_btn.on("click", function() {
+                    login_list.classList.toggle("show");
+                });
+
+                for(var name in rv.providers) {
+                    var item = $.new("a");
+                    item.textContent = name;
+                    login_list.append(item);
+                }
+
+                window.addEventListener("click", function(e) {
+                    if (!e.target.matches(".dropdown-toggle")) {
+                        if (login_list.classList.contains('show')) {
+                            login_list.classList.remove('show');
+                        }
+                    }
+                });
+            },
+            function(err) {
+                console.log(err);
             }
-        });
+        );
+
     }
 
     domready(function() {
         init();
         fetchComments();
-        setLoginProvider();
+        setLoginProviders();
     });
 
     window.Isso = {
         init: init,
-        fetchComments: fetchComments
+        fetchComments: fetchComments,
+        setLoginProviders: setLoginProviders
     };
 
 });
